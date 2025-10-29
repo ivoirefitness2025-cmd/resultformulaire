@@ -562,30 +562,29 @@
                 const mailTo = mail.trim();
                 const subject = "Invitation - Ouverture Ivoire Fitness";
                 
-                // Corps du mail personnalisé avec HTML
+                // NOUVEAU: Corps en plain text, formaté avec \r\n pour la compatibilité
                 const body = [
                     `Bonjour ${nom},`,
-                    "<br><br>",
-                    "Nous sommes ravis de vous inviter personnellement à l'ouverture officielle de notre nouvelle salle de sport, <strong>Ivoire Fitness</strong> !",
-                    "<br><br>",
-                    "Votre présence serait un honneur pour nous. Voici le programme de l'événement :",
-                    "<ul>",
-                    "<li><strong>16h00 :</strong> Coupure de ruban 🎀</li>",
-                    "<li><strong>16h30 - 17h00 :</strong> Visite de la salle</li>",
-                    "<li><strong>17h00 - 17h45 :</strong> Jeux et challenges avec de nombreux lots à gagner</li>",
-                    "<li><strong>18h00 - 20h00 :</strong> Présentation de nos séances collectives</li>",
-                    "<li><strong>20h00 :</strong> Coupure du gâteau</li>",
-                    "</ul>",
-                    "<br>",
-                    "Pour célébrer, voici votre offre spéciale de bienvenue :",
-                    "<br>",
-                    // Image intégrée comme demandé
-                    `<img src="https://i.postimg.cc/fyJngmdQ/Cream-Minimalist-Menu-QR-Code-Placement-Instagram-Post-pdf-1.png" alt="Offre Spéciale Ivoire Fitness" style="max-width: 90%; height: auto; border: 1px solid #ddd; border-radius: 8px;">`,
-                    "<br><br>",
+                    "", // \r\n\r\n
+                    "Nous sommes ravis de vous inviter personnellement à l'ouverture officielle de notre nouvelle salle de sport, Ivoire Fitness !",
+                    "",
+                    "Votre présence serait un honneur pour nous. Venez découvrir un nouvel espace dédié à votre bien-être et célébrer ce moment avec nous.",
+                    "",
+                    "AU PROGRAMME DE L'ÉVÉNEMENT :",
+                    "- 16h00 : Coupure de ruban 🎀",
+                    "- 16h30 - 17h00 : Visite de la salle",
+                    "- 17h00 - 17h45 : Jeux et challenges (nombreux lots à gagner !)",
+                    "- 18h00 - 20h00 : Présentation de nos séances collectives",
+                    "- 20h00 : Coupure du gâteau",
+                    "",
+                    "Pour plus de détails et pour suivre l'événement, rendez-vous sur notre page Facebook :",
+                    "https://web.facebook.com/share/p/178xdvRbGW/",
+                    "",
                     "Nous avons hâte de vous voir !",
-                    "<br>",
+                    "",
+                    "Sportivement,",
                     "L'équipe Ivoire Fitness"
-                ].join(''); // Utilise <br> et <ul> pour le HTML
+                ].join('\r\n'); // Utilise \r\n pour les sauts de ligne plain text
                 
                 // Le body doit être encodé pour l'URL
                 const href = `mailto:${mailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -712,3 +711,4 @@
 
 </body>
 </html>
+
