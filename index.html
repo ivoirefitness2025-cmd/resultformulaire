@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Participants - Ivoire Fitness</title>
+    <style>
+        /* --- Styles Généraux (Noir & Rouge) --- */
+        :root {
+            --color-red: #E60000;
+            --color-black: #121212;
+            --color-dark-grey: #1e1e1e;
+            --color-light-grey: #333333;
+            --color-text: #f0f0f0;
+            --color-text-muted: #aaaaaa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--color-black);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* --- En-tête & Logo Agrandit --- */
+        header {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 2px solid var(--color-light-grey);
+            margin-bottom: 20px;
+        }
+
+        header img.logo {
+            /* Logo agrandi comme demandé */
+            max-width: 180px; 
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        header h1 {
+            color: var(--color-red);
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        /* --- Titres de Section --- */
+        h2 {
+            color: var(--color-red);
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--color-light-grey);
+            padding-bottom: 5px;
+        }
+        
+        /* --- Boutons d'Action --- */
+        .actions-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            font-size: 1em;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-red);
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+        
+        .btn-secondary {
+            background-color: var(--color-dark-grey);
+            color: var(--color-text);
+            border: 1px solid var(--color-light-grey);
+        }
+        .btn-secondary:hover {
+            background-color: var(--color-light-grey);
+        }
+
+        /* --- Section Synthèse (Total) --- */
+        .summary-total {
+            background-color: var(--color-dark-grey);
+            border-left: 5px solid var(--color-red);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .summary-total strong {
+            color: var(--color-red);
+            font-size: 1.5em;
+        }
+
+        /* --- NOUVEAU: Accordéon Dynamique par Zone --- */
+        #accordionContainer {
+            margin-bottom: 30px;
+        }
+
+        .zone-toggle {
+            background-color: var(--color-dark-grey);
+            color: var(--color-text);
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid var(--color-black);
+            border-left: 5px solid var(--color-red);
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .zone-toggle:hover, .zone-toggle.active {
+            background-color: var(--color-light-grey);
+        }
+
+        .zone-toggle .count-badge {
+            background-color: var(--color-red);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        
+        .zone-toggle .arrow {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--color-text-muted);
+            transition: transform 0.3s ease;
+        }
+        
+        .zone-toggle.active .arrow {
+            transform: rotate(45deg);
+        }
+
+        .zone-participants {
+            padding: 0 15px;
+            background-color: #161616; /* Un peu plus clair que le fond */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 5px solid var(--color-light-grey);
+        }
+        
+        .participant-card {
+            background: var(--color-dark-grey);
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-bottom: 2px solid var(--color-light-grey);
+        }
+        
+        .participant-card strong {
+            display: block;
+            color: var(--color-text);
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+        
+        .participant-card a {
+            color: var(--color-red);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 10px;
+            display: inline-block;
+            font-size: 0.95em;
+        }
+        
+        .participant-card .email {
+            font-size: 0.9em;
+            color: var(--color-text-muted);
+            word-break: break-all;
+        }
+
+        /* --- Section Participants (Recherche) --- */
+        .search-wrapper {
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 14px;
+            font-size: 1em;
+            background-color: var(--color-dark-grey);
+            color: var(--color-text);
+            border: 1px solid var(--color-light-grey);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: var(--color-red);
+            box-shadow: 0 0 8px rgba(230, 0, 0, 0.5);
+        }
+
+        /* --- Tableau Responsive --- */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--color-light-grey);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-light-grey);
+            white-space: nowrap;
+        }
+
+        thead tr {
+            background-color: var(--color-red);
+            color: #ffffff;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        tbody tr {
+            background-color: var(--color-dark-grey);
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #222222;
+        }
+
+        tbody tr:hover {
+            background-color: var(--color-light-grey);
+        }
+
+        td a {
+            color: var(--color-red);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* --- NOUVEAU: Bouton Retour en Haut --- */
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            background-color: var(--color-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            text-decoration: none;
+        }
+        
+        #backToTopBtn:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body id="top">
+
+    <header>
+        <img src="https://i.postimg.cc/t4sVbMhL/Design-sans-titre-9.png" alt="Logo Ivoire Fitness" class="logo">
+        <h1>Dashboard Participants</h1>
+    </header>
+
+    <div class="container">
+    
+        <!-- =======================
+             NOUVEAU: Actions Rapides
+             ======================= -->
+        <section id="actions-section">
+            <h2>Actions Rapides</h2>
+            <div class="actions-wrapper">
+                <button id="gmailBtn" class="btn btn-primary">
+                    Envoyer le Mail de Suivi
+                </button>
+                <a href="#participants-section" class="btn btn-secondary">
+                    Aller à la Recherche Rapide
+                </a>
+            </div>
+        </section>
+
+        <!-- =======================
+             SECTION ZONES DYNAMIQUES
+             ======================= -->
+        <section id="zone-section">
+            <h2>Participants par Zone</h2>
+            
+            <div class="summary-total">
+                Participants Total : <strong id="totalCount">0</strong>
+            </div>
+
+            <div id="accordionContainer">
+                <!-- L'accordéon dynamique sera injecté ici -->
+            </div>
+        </section>
+
+        <!-- =================================
+             SECTION LISTE COMPLÈTE & RECHERCHE
+             ================================= -->
+        <section id="participants-section">
+            <h2>Recherche Rapide (Tous)</h2>
+            
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Rechercher un nom, un tél, une commune...">
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom et Prénom</th>
+                            <th>Numéro de Téléphone</th>
+                            <th>Commune</th>
+                            <th>Email (si fourni)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Les participants (table complète) seront injectés ici -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Bouton Retour en Haut -->
+    <a href="#top" id="backToTopBtn" title="Retour en haut">&uarr;</a>
+
+    <!-- =======================
+         SCRIPT DYNAMIQUE
+         ======================= -->
+    <script>
+        // --- Base de données des participants (131 entrées) ---
+        const participants = [
+            { nom: "Coach wesly", tel: "0707289081", com: "Koumassi", mail: "" },
+            { nom: "Mme AKA MARIE CHANTALE", tel: "0709102589", com: "MARCORY", mail: "Mariechantalekadjo@gmail.com" },
+            { nom: "DIOMANDE karamoko", tel: "0747961678", com: "Adjame Williamsville", mail: "diomandekaramoko2022@gmail.com" },
+            { nom: "Koné Anie", tel: "0748092807", com: "Cocody", mail: "" },
+            { nom: "Mme Kachour", tel: "0788466949", com: "Koumassi", mail: "" },
+            { nom: "SAGARA MOUSSA", tel: "0757213350", com: "BINGERVILLE", mail: "moussasagara20@gmail.com" },
+            { nom: "Loulou", tel: "0708025035", com: "Koumassi Remblais", mail: "diopdeyu@gmail.com" },
+            { nom: "SAWADOGO Ange Marie Christelle", tel: "0747574702", com: "Cocody", mail: "" },
+            { nom: "BOGA Emmanuelle", tel: "0778677431", com: "Koumassi", mail: "bogaemmanuelle0@gmail.com" },
+            { nom: "Sawadogo jean Joël Ludovic.( SAWAFITNESS)", tel: "0759963082", com: "Cocody Riviera", mail: "kouakouaboubacar22@gmail.com" },
+            { nom: "Ulrich kablan", tel: "0769774503", com: "Koumassi", mail: "" },
+            { nom: "Koffi Chayé Jeanne", tel: "0758914352", com: "Koumassi", mail: "Koffichayejeanne@gmail.com" },
+            { nom: "HOUNKANLI Rico", tel: "0708084739", com: "Cocody M'Badon", mail: "rico_hounkanli@yahoo.fr" },
+            { nom: "Ezan Adline", tel: "0759067227", com: "Koumassi", mail: "adlinaezan@gmail.com" },
+            { nom: "Osim David", tel: "0769190115", com: "Port Bouet", mail: "osimdavid4@gmail.com" },
+            { nom: "AMARI Jean Rosel", tel: "0789885196", com: "Koumassi", mail: "" },
+            { nom: "Diallo Zeinab", tel: "0778205247", com: "Rivera m’badon", mail: "" },
+            { nom: "Christina kouadio", tel: "0747706012", com: "Remblais koumassi", mail: "christinakouadio1@gmail.com" },
+            { nom: "Christina kouadio", tel: "747706012", com: "Koumassi remblais", mail: "christinakouadio1@gmail.com" },
+            { nom: "Diallo Aïcha Fernanda", tel: "0708734830", com: "Port-bouet", mail: "fernandadiallo3@gmail.com" },
+            { nom: "Kone", tel: "Stéphane", com: "Treichville", mail: "" },
+            { nom: "Loyo Alice", tel: "0759695605", com: "koumassi", mail: "alicemiessan915@gmail.com" },
+            { nom: "KOLIA Joëlle", tel: "07 77 25 61 66", com: "Cocody Riviera Palmeraie", mail: "joellaoungo@yahoo.fr" },
+            { nom: "Fry koffi Guillaume", tel: "0748404224", com: "", mail: "" },
+            { nom: "Bado marie", tel: "0749687914", com: "Marcory", mail: "mariebado78@gmail.com" },
+            { nom: "Boitrin Chimène", tel: "0707554510", com: "Marcory", mail: "chimeneboitrin23@gmail.com" },
+            { nom: "LEGRE MARIE ROSE", tel: "0707156149", com: "Marcory", mail: "legre071@gmail.com" },
+            { nom: "Soumahoro Massimi", tel: "0778667838", com: "Bingerville", mail: "massysoum78@gmail.com" },
+            { nom: "Kouadio Auriane", tel: "0768741500", com: "Koumassi", mail: "" },
+            { nom: "Koné MONAN Soualiou", tel: "0747385837", com: "GRAND-BASSAM", mail: "soualiouk@gmail.com" },
+            { nom: "Alvine Binkam", tel: "0767065598", com: "Koumassi", mail: "alvinebinkam@gmail.com" },
+            { nom: "Coulibaly anta", tel: "0544549083", com: "Marcory remblais", mail: "" },
+            { nom: "Coulibaly Dokana Fatou", tel: "0778291614", com: "Angré Petro", mail: "dokana241299@gmail.com" },
+            { nom: "Ouattara Mohamed", tel: "0501669630", com: "Port-Bouët", mail: "" },
+            { nom: "Christ Lago", tel: "0713445975", com: "Treichville", mail: "" },
+            { nom: "Joëlle bamba", tel: "0701782735", com: "Koumassi", mail: "Joëllebamba37@gmail.com" },
+            { nom: "Adja Fofana", tel: "0708574546", com: "Koumassi", mail: "Fofana.adja@sde-energies.com" },
+            { nom: "N’TA NOGBOU BRICE ARMAND", tel: "0707450261", com: "Marcory", mail: "bricearmandnogbounta@gmail.com" },
+            { nom: "Ile jean Luc", tel: "0789254122", com: "Cocody", mail: "ilejeanluc@gmail.com" },
+            { nom: "Essy jean", tel: "779713178", com: "Marcory", mail: "" },
+            { nom: "SOME MARIAME", tel: "0757753828", com: "Adjamé", mail: "somemariame38@gmail.com" },
+            { nom: "NAMENE Hugues Constant", tel: "0798910971", com: "Cocody", mail: "hugnamene2015@gmail.com" },
+            { nom: "Bello Tayson", tel: "bellotayson2018@gmail.com", com: "Port Bouet", mail: "bellotayson2018@gmail.com" },
+            { nom: "BAK", tel: "0595207959", com: "Koumassi remblais école Mirabelle", mail: "bakkiems@gmail.com" },
+            { nom: "Sanogo salimata", tel: "0718135302", com: "Koumassi grande mosquée", mail: "Sanogosalimata245@gmail.com" },
+            { nom: "Samir souleiman", tel: "0500168736", com: "Adjamé liberté", mail: "souleimantayyabou4@gmail.com" },
+            { nom: "Niakpa Nayanka", tel: "0789203628", com: "Cocody", mail: "" },
+            { nom: "LOUGUE Naomie Grâce", tel: "0566346378", com: "Koumassi", mail: "naomielougue@gmail.com" },
+            { nom: "Sada", tel: "0778575701", com: "Marcory", mail: "Sadaabdoul2018@gmail.com" },
+            { nom: "Akandan Anne-Sophie Aho", tel: "05 56 37 18 08", com: "Cocody", mail: "Annemarieak09@gmail.com" },
+            { nom: "Akandan Anne-Sophie Aho", tel: "05 56 37 18 08", com: "Cocody", mail: "Annemarieak09@gmail.com" },
+            { nom: "Affali mian armel", tel: "0778434347", com: "Cocody riviera palmeraie", mail: "mianarmel@yahoo.fr" },
+            { nom: "Kouadio Kouamé Gleya Éric", tel: "749951686", com: "SONGON", mail: "Erickouadioefa@gmail.com" },
+            { nom: "SIGUI PIERRE", tel: "0506250507", com: "Yopougon", mail: "sipierro1@gmail.com" },
+            { nom: "ZEZE Johan", tel: "0710079091", com: "Cocody", mail: "johan@zeze-kipre.com" },
+            { nom: "Lathlunel", tel: "0709705012", com: "Cocody", mail: "lunellath335@gmail.com" },
+            { nom: "Trah Cédric", tel: "707659065", com: "Marcory", mail: "trahcedric@gmail.com" },
+            { nom: "Amani Morel", tel: "05 02 43 31 21", com: "YOPOUGON", mail: "Amanimorel0@gmail.com" },
+            { nom: "DIALLO HAMAD", tel: "0505864873", com: "Adjamé", mail: "ad4783163@gmail.com" },
+            { nom: "ADOM GUY-STEPHANE", tel: "0707415106", com: "Marcory remblais", mail: "" },
+            { nom: "Diallo Mamadou Aliou", tel: "0747854412", com: "Marcory", mail: "mamadoualioudiallo222@gmail.com" },
+            { nom: "JOEL MOH", tel: "0748658445", com: "KOUMASSI", mail: "" },
+            { nom: "Sylla Madé", tel: "07 07 83 50 98", com: "Bassam mais je travaille à Marcory", mail: "madesylla5@gmail.com" },
+            { nom: "Nkrumah Appiah kobenan Francis", tel: "0778056874", com: "Yopougon", mail: "appiah.6874@gmail.com" },
+            { nom: "Nkrumah Appiah kobenan Francis", tel: "0778056874", com: "Yopougon", mail: "appiah.6874@gmail.com" },
+            { nom: "Touré Oumou", tel: "0707067708", com: "Koumassi grande mosquée", mail: "" },
+            { nom: "Kobri Claude Axel", tel: "0748781702", com: "Marcory", mail: "Claudeaxelkobri@gmail.com" },
+            { nom: "Bangoura M'mahawa Missiran", tel: "mmahawamissiranbangoura@gmail.com", com: "Attecoubé", mail: "mmahawamissiranbangoura@gmail.com" },
+            { nom: "Agnero Edwige", tel: "0101191268", com: "Yopougon", mail: "k.michaelkouame@gmail.com" },
+            { nom: "Koffi Henri", tel: "0170854429", com: "Marcory", mail: "Koffiagaireth1307@gmail.com" },
+            { nom: "Kamagate adjara", tel: "0708674283", com: "Koumassi sopim", mail: "Edwigekamagate095@gmail" },
+            { nom: "Konaté cheick", tel: "0768753578", com: "koumassi", mail: "Ismo_2012@hotmail.fr" },
+            { nom: "Christina Kouadio", tel: "0747706012", com: "Koumassi remblais", mail: "Christinakouadio1@gmail.com" },
+            { nom: "Koné Wilfried A J", tel: "0778297174", com: "Koumassi", mail: "" },
+            { nom: "Goulian Jean-Marc", tel: "0759799535", com: "marcory", mail: "marcogoulian2777@gmail.com" },
+            { nom: "Irie bi syril", tel: "0767758364", com: "Yopougon", mail: "lambano806@gmail.com" },
+            { nom: "Anoh Marie", tel: "0748537151", com: "Port Bouet", mail: "Anohm78@gmail.com" },
+            { nom: "Trèfle Fabrice", tel: "0711488361", com: "Yopougon", mail: "Yoanchrist84@gmail.com" },
+            { nom: "Wognin Roger Vincent", tel: "0103230839", com: "Koumassi", mail: "Wogninrogervincent@gmail.com" },
+            { nom: "Serge henri", tel: "596942381", com: "Bassam", mail: "Sergyhenry@gmail.com" },
+            { nom: "KABLAN Emmanuel", tel: "101664013", com: "Marcory", mail: "" },
+            { nom: "Koutouan Marcelle", tel: "0757897508", com: "Marcory", mail: "Koutouanmarcelle24@icloud.com" },
+            { nom: "BASSOUM", tel: "0709069337", com: "KOUMASSI", mail: "bassoummohamed89@gmail.com" },
+            { nom: "Doumbia sory", tel: "0747052594", com: "Koumassi", mail: "ladjidoumbia52@gmail.com" },
+            { nom: "ASSE Jean-Marc", tel: "0757978027", com: "Koumassi/Abidjan", mail: "rub24ma@gmail.com" },
+            { nom: "Kouakou kanh romain", tel: "0757720520", com: "Koumassi", mail: "" },
+            { nom: "Aïssata noura", tel: "0788141749", com: "Abobo", mail: "aissatanoura88@gmail.com" },
+            { nom: "Dossouklo Yao Nestor", tel: "0555557620", com: "Cocody 7e tranche", mail: "nestordossouklo@gmail.com" },
+            { nom: "Apenssan AHOULOU Geoffroy", tel: "0759392803", com: "Bonoua (sud-Comoe)", mail: "Apenssang@gmail.com" },
+            { nom: "Bli sahie Ange Pascal", tel: "0779889590", com: "Marcory remblai", mail: "" },
+            { nom: "Yeo Sara Marie-Paule", tel: "07 78 68 13 52", com: "Angre", mail: "Mariepyeo@gmail.com" },
+            { nom: "Toure oumou", tel: "0707067708", com: "Koumassi grande mosquée", mail: "" },
+            { nom: "Koffi Ulrich", tel: "0757568403", com: "Port Bouet", mail: "koffiangeulrich@gmail.com" },
+            { nom: "Kamagate awa", tel: "0151850153", com: "Marcory", mail: "Awa.hamza@gmail.com" },
+            { nom: "Paul-Axel DAMOIS", tel: "0777158289", com: "Marcory", mail: "damoispaul2003@gmail.com" },
+            { nom: "TCHIAKPE Chris Bignon", tel: "0709202810", com: "Marcory", mail: "" },
+            { nom: "Radji Samyra Maria", tel: "0768488032", com: "Marcory remblais", mail: "mariaradji2001@gmail.com" },
+            { nom: "Attimbré lézou", tel: "0140678449", com: "Marcory", mail: "eattimbre@gmail.com" },
+            { nom: "Kamagate Awa", tel: "0779995398", com: "Marcory remblais", mail: "awa.hamza@gmail.com" },
+            { nom: "Prince-Olivier KONAN", tel: "0777606542", com: "Marcory", mail: "princeschekina96@gmail.com" },
+            { nom: "EBRIN FRANCK LANDRY", tel: "0767506137", com: "Koumassi", mail: "franckebrin1@gmail.com" },
+            { nom: "Bachir Diabaté", tel: "0709413536", com: "Cocody", mail: "" },
+            { nom: "SOMALÉ ALEXANDRINE", tel: "0101382643", com: "MARCORY", mail: "" },
+            { nom: "Gueyes Dylan", tel: "0501544358", com: "Cocody Angré", mail: "gueyesdylan92@gmail.com" },
+            { nom: "Koffi Christ-Manon Ballo", tel: "0141415415", com: "Koumassi", mail: "0141415415" },
+            { nom: "Alle Monney Emmanuel", tel: "0143226303", com: "Koumassi", mail: "Smonney117@gmail.com" },
+            { nom: "Fofana Youssouf", tel: "0140925135", com: "Cocody, pharmacie des arcades", mail: "" },
+            { nom: "Traoré Check", tel: "0708577913", com: "Marcory", mail: "" },
+            { nom: "Nikiema Arouna", tel: "0708489081", com: "Marcory", mail: "meccaa06@gmail.com" },
+            { nom: "Apenssan AHOULOU Geoffroy", tel: "0769392803", com: "Bonoua", mail: "Apenssang@gmail.com" },
+            { nom: "ETTY Kurtis", tel: "0748705029", com: "MARCORY Remblais", mail: "Kurtisetty@gmail.com" },
+            { nom: "N'GUESSAN Tanyan", tel: "0789724505", com: "Koumassi remblais", mail: "tanyanguessan122@gmail.com" },
+            { nom: "Dah stephane roch", tel: "0779357475", com: "Marcory", mail: "Stephanerochd@gmail.com" },
+            { nom: "Guehi Jean Martial Junior", tel: "0747542466", com: "Koumassi", mail: "jeanmartialjuniorg2@gmail.com" },
+            { nom: "Allepo Alé Marilyse Nelly", tel: "0172618585", com: "Marcory remblais", mail: "alleponelly@gmail.com" },
+            { nom: "Diarra Koke ilian", tel: "0171233157", com: "Marcory", mail: "diarrailian885@gmail.com" },
+            { nom: "Seri Christ David Dehi", tel: "0585675268", com: "Marcory", mail: "Seridavid411@gmail.com" },
+            { nom: "Dattie Richmond Emmanuel", tel: "0769191646", com: "Marcory", mail: "qhfb560@gmail.com" },
+            { nom: "Ba Saïd", tel: "0710245557", com: "MARCORY", mail: "Svdvmeeg@gmail.com" },
+            { nom: "Toure moindjou", tel: "0717978118", com: "Marcory", mail: "moindjoutoure@gmail.com" },
+            { nom: "Seri Melaine Andrea", tel: "0749518006", com: "Marcory", mail: "Serimelo50@gmail.com" },
+            { nom: "Dah sie Mardochée", tel: "0711606939", com: "Cocody", mail: "dahmardochee08@gmail.com" },
+            { nom: "Dah sie Mardochée", tel: "0711606939", com: "Cocody", mail: "" },
+            { nom: "Dah sie Mardochée", tel: "0711606939", com: "Cocody", mail: "dahmardochee08@gmail.com" },
+            { nom: "Dah sie Mardochée", tel: "0711606939", com: "Cocody", mail: "dahmardochee08@gmail.com" },
+            { nom: "Alex", tel: "0767565977", com: "Port-Bouet", mail: "" },
+            { nom: "AKA N’DABLE SERGE", tel: "0757944445", com: "Port bouët", mail: "Cholaaka47@gmail.com" },
+            { nom: "Diane Christelle", tel: "0789063681", com: "Marcory", mail: "" },
+            { nom: "BONIAN AHOU HELENE", tel: "0708338038", com: "KOUMASSI REMBLAIS", mail: "" },
+            { nom: "BINDE ROSE", tel: "0748134903", com: "Koumassi 05", mail: "rosemariebinde@gmail.com" },
+            { nom: "Josue Gbame", tel: "0769352815", com: "Port bouet", mail: "josue19gbame@gmail.com" }
+        ];
+
+        // --- Logique d'affichage et de filtrage ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFullTable();
+            renderZoneAccordion();
+            
+            // Listeners pour les actions
+            document.getElementById('searchInput').addEventListener('keyup', filterTable);
+            document.getElementById('gmailBtn').addEventListener('click', openGmailTemplate);
+            document.getElementById('accordionContainer').addEventListener('click', toggleAccordion);
+            
+            // Listener pour le bouton "Back to Top"
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            window.onscroll = () => {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    backToTopBtn.style.display = "block";
+                } else {
+                    backToTopBtn.style.display = "none";
+                }
+            };
+        });
+
+        // Fonction pour standardiser les noms des communes
+        function standardizeCommune(commune) {
+            let c = commune.trim().toUpperCase();
+            if (c.includes('KOUMASSI')) return 'Koumassi';
+            if (c.includes('MARCORY')) return 'Marcory';
+            if (c.includes('COCODY') || c.includes('RIVIERA') || c.includes('ANGR')) return 'Cocody';
+            if (c.includes('PORT-BOUET') || c.includes('PORT BOUET')) return 'Port-Bouët';
+            if (c.includes('YOPOUGON')) return 'Yopougon';
+            if (c.includes('ADJAME') || c.includes('ADJAMÉ')) return 'Adjamé';
+            if (c.includes('BINGERVILLE')) return 'Bingerville';
+            if (c.includes('BASSAM')) return 'Grand-Bassam';
+            if (c.includes('TREICHVILLE')) return 'Treichville';
+            if (c.includes('BONOUA')) return 'Bonoua';
+            if (c.includes('SONGON')) return 'Songon';
+            if (c.includes('ATTECOUBE') || c.includes('ATTÉCOUBÉ')) return 'Attecoubé';
+            if (c.includes('ABOBO')) return 'Abobo';
+            if (c === '') return 'Non renseigné';
+            return commune.trim(); // Original si non reconnu
+        }
+        
+        // Formate un numéro de téléphone en lien cliquable
+        function formatTel(tel) {
+            return tel.match(/^[0-9\s+]+$/) ? `<a href="tel:${tel.replace(/\s/g, '')}">${tel}</a>` : tel;
+        }
+        
+        // Formate un email en lien cliquable
+        function formatMail(mail) {
+            return mail.includes('@') ? `<a href="mailto:${mail}">${mail}</a>` : (mail ? mail : 'N/A');
+        }
+
+        // Fonction pour générer l'accordéon dynamique
+        function renderZoneAccordion() {
+            const container = document.getElementById('accordionContainer');
+            const totalCountEl = document.getElementById('totalCount');
+            container.innerHTML = '';
+            
+            let groupedByZone = new Map();
+            let total = 0;
+
+            for (const p of participants) {
+                total++;
+                const zone = standardizeCommune(p.com);
+                if (!groupedByZone.has(zone)) {
+                    groupedByZone.set(zone, []);
+                }
+                groupedByZone.get(zone).push(p);
+            }
+            
+            totalCountEl.innerText = total;
+
+            // Trier les zones par nombre de participants
+            const sortedZones = [...groupedByZone.entries()].sort((a, b) => b[1].length - a[1].length);
+
+            for (const [zone, list] of sortedZones) {
+                let participantsHtml = '';
+                for (const p of list) {
+                    participantsHtml += `
+                        <div class="participant-card">
+                            <strong>${p.nom.trim()}</strong>
+                            ${formatTel(p.tel)}
+                            <br>
+                            <span class="email">${formatMail(p.mail)}</span>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <button class="zone-toggle">
+                        <span>
+                            ${zone} <span class="count-badge">${list.length}</span>
+                        </span>
+                        <span class="arrow">+</span>
+                    </button>
+                    <div class="zone-participants">
+                        ${participantsHtml}
+                    </div>
+                `;
+            }
+        }
+        
+        // Fonction pour remplir le tableau global de recherche
+        function renderFullTable() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            
+            for (const p of participants) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${p.nom.trim()}</td>
+                    <td>${formatTel(p.tel)}</td>
+                    <td>${p.com.trim()}</td>
+                    <td>${formatMail(p.mail)}</td>
+                `;
+                tableBody.appendChild(tr);
+            }
+        }
+
+        // Fonction pour filtrer le tableau global
+        function filterTable() {
+            const filter = document.getElementById('searchInput').value.toUpperCase();
+            const rows = document.getElementById('tableBody').getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = found ? '' : 'none';
+            }
+        }
+        
+        // Fonction pour gérer l'ouverture/fermeture de l'accordéon
+        function toggleAccordion(e) {
+            const button = e.target.closest('.zone-toggle');
+            if (!button) return;
+
+            button.classList.toggle('active');
+            const arrow = button.querySelector('.arrow');
+            const content = button.nextElementSibling;
+            
+            if (content.style.maxHeight) {
+                // Fermer
+                content.style.maxHeight = null;
+                arrow.innerText = '+';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                // Ouvrir
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.innerText = '+';
+                arrow.style.transform = 'rotate(45deg)';
+            }
+        }
+        
+        // Fonction pour ouvrir le client Gmail avec le template
+        function openGmailTemplate() {
+            const subject = "Suivi - Journée Porte Ouverte Ivoire Fitness";
+            
+            // \r\n est utilisé pour les sauts de ligne dans mailto
+            const body = [
+                "Bonjour [Nom du Participant],",
+                "\r\n\r\n",
+                "Merci infiniment pour votre participation à notre Journée Porte Ouverte chez Ivoire Fitness !",
+                "\r\n\r\n",
+                "Nous espérons que l'événement vous a plu et que vous avez pu découvrir tout ce que notre club a à offrir.",
+                "\r\n",
+                "Pour rappel, voici l'offre spéciale de l'événement :",
+                "https://i.postimg.cc/fyJngmdQ/Cream-Minimalist-Menu-QR-Code-Placement-Instagram-Post-pdf-1.png",
+                "\r\n\r\n",
+                "N'hésitez pas à nous contacter si vous avez la moindre question sur nos abonnements ou nos services.",
+                "\r\n\r\n",
+                "Sportivement,",
+                "\r\n",
+                "L'équipe Ivoire Fitness"
+            ].join('');
+            
+            // On encode les composants pour l'URL
+            const encodedSubject = encodeURIComponent(subject);
+            const encodedBody = encodeURIComponent(body);
+            
+            // On crée le lien mailto. Le "?" sans email ouvre le composeur par défaut.
+            window.location.href = `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
+        }
+
+    </script>
+
+</body>
+</html>
