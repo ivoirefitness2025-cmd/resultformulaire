@@ -567,27 +567,25 @@
             // Vérifie si le mail est valide
             if (mail && mail.includes('@')) {
                 const mailTo = mail.trim();
-                const subject = "Invitation - Ouverture Ivoire Fitness";
+                // NOUVEAU SUJET: Annonce du report
+                const subject = "Information Importante : Report de l'ouverture Ivoire Fitness";
                 
-                // NOUVEAU: Corps en plain text, formaté avec \r\n pour la compatibilité
+                // NOUVEAU CORPS: Mail d'excuse et de report
                 const body = [
                     `Bonjour ${nom},`,
                     "", // \r\n\r\n
-                    "Nous sommes ravis de vous inviter personnellement à l'ouverture officielle de notre nouvelle salle de sport, Ivoire Fitness !",
+                    "Nous vous remercions vivement pour l'intérêt que vous portez à l'ouverture de notre salle Ivoire Fitness.",
                     "",
-                    "Votre présence serait un honneur pour nous. Venez découvrir un nouvel espace dédié à votre bien-être et célébrer ce moment avec nous.",
+                    "C'est avec beaucoup de regrets que nous vous informons que, suite à des imprévus indépendants de notre volonté, nous sommes contraints de reporter notre événement d'ouverture.",
                     "",
-                    "AU PROGRAMME DE L'ÉVÉNEMENT :",
-                    "- 16h00 : Coupure de ruban 🎀",
-                    "- 16h30 - 17h00 : Visite de la salle",
-                    "- 17h00 - 17h45 : Jeux et challenges (nombreux lots à gagner !)",
-                    "- 18h00 - 20h00 : Présentation de nos séances collectives",
-                    "- 20h00 : Coupure du gâteau",
+                    "Nous sommes sincèrement désolés pour ce changement de dernière minute et pour la gêne que cela pourrait occasionner.",
                     "",
-                    "Pour plus de détails et pour suivre l'événement, rendez-vous sur notre page Facebook :",
+                    "Votre invitation reste bien entendu valable ! Nous travaillons activement pour fixer une nouvelle date et nous vous la communiquerons au plus vite.",
+                    "",
+                    "Pour rester informé en temps réel de la nouvelle date, nous vous invitons à suivre notre page Facebook :",
                     "https://web.facebook.com/share/p/178xdvRbGW/",
                     "",
-                    "Nous avons hâte de vous voir !",
+                    "Merci de votre compréhension et de votre patience.",
                     "",
                     "Sportivement,",
                     "L'équipe Ivoire Fitness"
@@ -718,5 +716,6 @@
 
 </body>
 </html>
+
 
 
