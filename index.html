@@ -504,7 +504,13 @@
             { nom: "Janin Jean Martial tanoe", tel: "0141314072", com: "Cocody", mail: "jeanmartialtanoe@gmail.com" },
             { nom: "Anouma Richard", tel: "0101680651", com: "Koumassi", mail: "anoumarichard1@gmail.com" },
             { nom: "YESSOH BOIDY JEAN-JORES", tel: "0788271960", com: "KOUMASSI", mail: "Yessohjaures@gmail.com" },
-            { nom: "KOUAME Bernard Junior", tel: "0152752754", com: "Koumassi", mail: "B.assacy@gmail.com" }
+            { nom: "KOUAME Bernard Junior", tel: "0152752754", com: "Koumassi", mail: "B.assacy@gmail.com" },
+            // --- AJOUTS DU 05/11 ---
+            { nom: "OSSENI CHEICK ELIAS BELLO", tel: "0758402965", com: "Marcory Résidentiel", mail: "EliasCarter941@gmail.com" },
+            { nom: "AKA YAO AUGUSTIN", tel: "0554929684", com: "Koumassi", mail: "" },
+            { nom: "Amani Paul Christian Emmanuel", tel: "0768969891", com: "Marcory", mail: "paulchristianamani@gmail.com" },
+            { nom: "Appiah Sandra", tel: "07 08 466 040", com: "Marcory", mail: "" },
+            { nom: "Liré Ange", tel: "01 51 78 89 68", com: "Koumassi", mail: "Szulu1207@Gmail.com" }
         ];
 
         // --- Logique d'affichage et de filtrage ---
@@ -567,25 +573,31 @@
             // Vérifie si le mail est valide
             if (mail && mail.includes('@')) {
                 const mailTo = mail.trim();
-                // NOUVEAU SUJET: Annonce du report
-                const subject = "Information Importante : Report de l'ouverture Ivoire Fitness";
+                // NOUVEAU SUJET: Invitation pour la nouvelle date
+                const subject = "Invitation Officielle - Ouverture Ivoire Fitness le 8 Novembre !";
                 
-                // NOUVEAU CORPS: Mail d'excuse et de report
+                // NOUVEAU CORPS: Mail d'invitation pour le 8 Novembre
                 const body = [
                     `Bonjour ${nom},`,
                     "", // \r\n\r\n
-                    "Nous vous remercions vivement pour l'intérêt que vous portez à l'ouverture de notre salle Ivoire Fitness.",
+                    "La bonne nouvelle est là ! Après un court report, nous sommes ravis de vous annoncer la date officielle de l'ouverture de votre nouvelle salle de sport, Ivoire Fitness.",
                     "",
-                    "C'est avec beaucoup de regrets que nous vous informons que, suite à des imprévus indépendants de notre volonté, nous sommes contraints de reporter notre événement d'ouverture.",
+                    "Nous vous invitons personnellement à nous rejoindre le :",
+                    "Vendredi 8 Novembre, à partir de 16h00.",
                     "",
-                    "Nous sommes sincèrement désolés pour ce changement de dernière minute et pour la gêne que cela pourrait occasionner.",
+                    "Votre invitation initiale est bien sûr valable pour cette nouvelle date. Venez célébrer avec nous !",
                     "",
-                    "Votre invitation reste bien entendu valable ! Nous travaillons activement pour fixer une nouvelle date et nous vous la communiquerons au plus vite.",
+                    "RAPPEL DU PROGRAMME :",
+                    "- 16h00 : Coupure de ruban 🎀",
+                    "- 16h30 - 17h00 : Visite de la salle",
+                    "- 17h00 - 17h45 : Jeux et challenges (nombreux lots à gagner !)",
+                    "- 18h00 - 20h00 : Présentation de nos séances collectives",
+                    "- 20h00 : Coupure du gâteau",
                     "",
-                    "Pour rester informé en temps réel de la nouvelle date, nous vous invitons à suivre notre page Facebook :",
+                    "Suivez les dernières infos sur notre page Facebook :",
                     "https://web.facebook.com/share/p/178xdvRbGW/",
                     "",
-                    "Merci de votre compréhension et de votre patience.",
+                    "Nous avons hâte de vous accueillir le 8 Novembre !",
                     "",
                     "Sportivement,",
                     "L'équipe Ivoire Fitness"
@@ -716,6 +728,3 @@
 
 </body>
 </html>
-
-
-
